@@ -6,136 +6,92 @@
   <meta name="theme-color" content="#18212a">
   <title>Mesto — voľná jazda</title>
   <style>
-    :root{color-scheme:dark;--glass:rgba(16,25,32,.72);--line:rgba(255,255,255,.17);--text:#f4f6f7;--muted:#bbc3c9;--green:#c4f27b}
+    :root{color-scheme:dark;--glass:rgba(16,25,32,.78);--line:#ffffff2b;--text:#f4f6f7;--muted:#bbc3c9;--green:#c4f27b;--blue:#79dafa}
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#a9c5d3;color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;touch-action:none;user-select:none}#game{position:fixed;inset:0}canvas{display:block;width:100%;height:100%}
-    .hud{position:fixed;inset:0;padding:calc(14px + env(safe-area-inset-top)) 14px calc(13px + env(safe-area-inset-bottom));display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.brand{font-size:10px;font-weight:900;letter-spacing:.18em;color:#d9eeff;text-shadow:0 2px 8px #17242c}.brand b{display:block;color:white;font-size:17px;letter-spacing:.045em;margin-top:3px}.meters{display:flex;gap:8px}.meter{min-width:76px;text-align:center;padding:9px 10px;border:1px solid var(--line);border-radius:14px;background:var(--glass);backdrop-filter:blur(12px)}.meter strong{display:block;font-size:20px;line-height:1}.meter small{display:block;font-size:9px;color:var(--muted);letter-spacing:.14em;margin-top:5px}.iconbtn{pointer-events:auto;background:var(--glass);color:white;border:1px solid var(--line);border-radius:14px;width:47px;height:47px;font-size:18px}.bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}.tip{max-width:215px;padding:10px 12px;border:1px solid var(--line);border-radius:13px;background:var(--glass);backdrop-filter:blur(10px);font-size:11px;line-height:1.45;color:#edf2f4}.tip b{color:var(--green)}.controls{pointer-events:auto;display:flex;align-items:flex-end;gap:7px}.steer{display:flex;gap:6px;margin-right:5px}.control,.pedal{touch-action:none;color:white;background:rgba(20,29,35,.76);border:1px solid var(--line);box-shadow:0 7px 18px #0003}.control{width:53px;height:54px;border-radius:17px;font-size:21px;font-weight:800}.pedal{width:61px;height:67px;border-radius:17px;font-size:10px;font-weight:900;letter-spacing:.08em}.pedal span{display:block;font-size:21px;margin-bottom:2px}.gas{border-color:#c4f27b88}.brake{border-color:#ff827788}.active{background:#ffffff30!important;border-color:#fff!important;transform:scale(.97)}
-    .overlay{position:fixed;inset:0;display:grid;place-items:center;padding:20px;background:linear-gradient(180deg,#121a2040,#10171bd9);transition:opacity .2s,visibility .2s;z-index:5}.overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}.card{width:min(410px,100%);padding:26px 23px 20px;text-align:center;border:1px solid #ffffff24;border-radius:24px;background:rgba(20,29,35,.9);box-shadow:0 25px 80px #0006;backdrop-filter:blur(16px)}.eyebrow{font-weight:900;font-size:10px;letter-spacing:.2em;color:var(--green)}h1{font-size:clamp(34px,9vw,54px);line-height:.96;letter-spacing:-.06em;margin:12px 0}.card p{color:#d2dadd;font-size:14px;line-height:1.55;margin:0 auto 18px;max-width:320px}.buttons{display:grid;gap:9px}.primary,.secondary{padding:14px;border-radius:14px;font-weight:900;font-size:14px;cursor:pointer}.primary{border:0;background:var(--green);color:#18211b}.secondary{border:1px solid #ffffff24;background:#ffffff0c;color:white}.small{font-size:11px;color:#aab4ba;margin-top:13px}
-    @media(max-width:600px){.hud{padding-left:10px;padding-right:10px}.brand{font-size:9px}.brand b{font-size:14px}.meter{min-width:61px;padding:8px}.meter strong{font-size:17px}.controls{gap:5px}.steer{gap:5px;margin-right:0}.control{width:45px;height:49px}.pedal{width:53px;height:60px;font-size:9px}.tip{max-width:155px;font-size:10px;padding:8px}.iconbtn{width:43px;height:43px}}
-    @media(max-height:500px){.tip{display:none}.hud{padding-top:7px;padding-bottom:7px}.card{padding:17px}}
+    .hud{position:fixed;inset:0;padding:calc(14px + env(safe-area-inset-top)) 14px calc(13px + env(safe-area-inset-bottom));display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.brand{font-size:10px;font-weight:900;letter-spacing:.18em;color:#d9eeff;text-shadow:0 2px 8px #17242c}.brand b{display:block;color:white;font-size:17px;letter-spacing:.045em;margin-top:3px}.meters{display:flex;gap:8px}.meter{min-width:76px;text-align:center;padding:9px 10px;border:1px solid var(--line);border-radius:14px;background:var(--glass);backdrop-filter:blur(12px)}.meter strong{display:block;font-size:20px;line-height:1}.meter small{display:block;font-size:9px;color:var(--muted);letter-spacing:.14em;margin-top:5px}.bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}.tip{max-width:225px;padding:10px 12px;border:1px solid var(--line);border-radius:13px;background:var(--glass);backdrop-filter:blur(10px);font-size:11px;line-height:1.45;color:#edf2f4}.tip b{color:var(--green)}.controls{pointer-events:auto;display:flex;align-items:flex-end;gap:7px}.steer{display:flex;gap:6px;margin-right:5px}.control,.pedal{touch-action:none;color:white;background:rgba(20,29,35,.76);border:1px solid var(--line);box-shadow:0 7px 18px #0003}.control{width:53px;height:54px;border-radius:17px;font-size:21px;font-weight:800}.pedal{width:61px;height:67px;border-radius:17px;font-size:10px;font-weight:900;letter-spacing:.08em}.pedal span{display:block;font-size:21px;margin-bottom:2px}.gas{border-color:#c4f27b88}.brake{border-color:#ff827788}.active{background:#ffffff30!important;border-color:#fff!important;transform:scale(.97)}
+    .overlay{position:fixed;inset:0;display:grid;place-items:center;padding:20px;background:linear-gradient(180deg,#121a2040,#10171bd9);transition:opacity .2s,visibility .2s;z-index:5}.overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}.card{width:min(440px,100%);padding:26px 23px 20px;text-align:center;border:1px solid #ffffff24;border-radius:24px;background:rgba(20,29,35,.93);box-shadow:0 25px 80px #0006;backdrop-filter:blur(16px)}.eyebrow{font-weight:900;font-size:10px;letter-spacing:.2em;color:var(--green)}h1{font-size:clamp(34px,9vw,54px);line-height:.96;letter-spacing:-.06em;margin:12px 0}.card p{color:#d2dadd;font-size:14px;line-height:1.55;margin:0 auto 18px;max-width:340px}.primary,.secondary{width:100%;padding:14px;border-radius:14px;font-weight:900;font-size:14px;cursor:pointer}.primary{border:0;background:var(--green);color:#18211b}.secondary{margin-top:9px;border:1px solid #ffffff24;background:#ffffff0c;color:white}.small{font-size:11px;color:#aab4ba;margin-top:13px}.pair{display:flex;align-items:center;justify-content:center;gap:14px;margin:14px auto;padding:12px;background:#ffffff0c;border:1px solid #ffffff1b;border-radius:16px}.pair canvas{width:112px!important;height:112px!important;background:white;border-radius:8px;padding:4px}.pairInfo{font-size:12px;text-align:left;color:#cbd4da;line-height:1.45;overflow-wrap:anywhere}.code{font:900 19px ui-monospace,monospace;color:#fff;letter-spacing:.12em;margin:5px 0}.status{font-size:11px;color:var(--green);min-height:16px}
+    .remote{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 30%,#273947,#111922 75%);display:flex;flex-direction:column;justify-content:space-between;padding:calc(18px + env(safe-area-inset-top)) 18px calc(20px + env(safe-area-inset-bottom));z-index:10}.remote[hidden]{display:none}.remoteHead{text-align:center}.remoteHead b{display:block;font-size:18px;letter-spacing:.1em}.remoteHead small{color:#aab8c2}.connectForm{display:flex;gap:8px;margin:16px auto;width:min(420px,100%)}.connectForm input{min-width:0;flex:1;background:#ffffff12;color:white;border:1px solid #ffffff35;border-radius:12px;padding:12px;font-size:16px;text-align:center}.connectForm button{background:var(--green);color:#152019;border:0;border-radius:12px;font-weight:900;padding:0 15px}.remoteStatus{text-align:center;color:#ffdd91;font-size:13px;min-height:20px}.remoteControls{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;width:min(540px,100%);margin:0 auto}.remoteSteer{display:flex;gap:10px}.remoteControls button{color:white;background:#ffffff12;border:1px solid #ffffff35;box-shadow:0 7px 20px #0005;touch-action:none}.remoteSteer button{width:min(22vw,92px);height:min(22vw,92px);border-radius:26px;font-size:35px;font-weight:800}.remotePedals{display:flex;gap:9px}.remotePedals button{width:min(22vw,88px);height:min(26vw,106px);border-radius:24px;font-weight:900;font-size:13px}.remotePedals .gas{background:#baff6624;border-color:#baff6680}.remotePedals .brake{background:#ff657224;border-color:#ff657280}.remoteControls button.active{background:#ffffff40}.remoteHint{text-align:center;color:#9daab3;font-size:11px;margin-top:12px}
+    @media(max-width:600px){.hud{padding-left:10px;padding-right:10px}.brand{font-size:9px}.brand b{font-size:14px}.meter{min-width:61px;padding:8px}.meter strong{font-size:17px}.controls{gap:5px}.steer{gap:5px;margin-right:0}.control{width:45px;height:49px}.pedal{width:53px;height:60px;font-size:9px}.tip{max-width:155px;font-size:10px;padding:8px}.pair{gap:9px}.pair canvas{width:90px!important;height:90px!important}}
+    @media(max-height:500px){.tip{display:none}.hud{padding-top:7px;padding-bottom:7px}.card{padding:17px}.remoteControls button{height:65px!important}.remotePedals button{height:72px!important}}
   </style>
 </head>
 <body>
   <div id="game"></div>
-  <div class="hud">
-    <div class="top"><div class="brand">VOĽNÁ JAZDA<b>MESTO</b></div><div class="meters"><div class="meter"><strong id="speed">0</strong><small>KM/H</small></div><div class="meter"><strong id="gear">N</strong><small>PREVOD</small></div></div><button class="iconbtn" id="tilt" aria-label="Zapnúť nakláňanie">📱</button></div>
-    <div class="bottom"><div class="tip" id="tip"><b>VOĽNÁ JAZDA</b><br>Bez pretekov a cieľov. Zatoč tlačidlami alebo nakláňaním telefónu.</div><div class="controls"><div class="steer"><button class="control" data-steer="-1" aria-label="Zatoč doľava">◀</button><button class="control" data-steer="1" aria-label="Zatoč doprava">▶</button></div><button class="pedal brake" data-pedal="brake"><span>▼</span>BRZDA</button><button class="pedal gas" data-pedal="gas"><span>▲</span>PLYN</button></div></div>
-  </div>
-  <div class="overlay" id="overlay"><div class="card"><div class="eyebrow">MESTO • VOĽNÁ JAZDA</div><h1>Sadni si<br>za volant.</h1><p>Jazdi po meste vlastným tempom. Zatáčaj a odbočuj na križovatkách — žiadne preteky, stopky ani koniec hry.</p><div class="buttons"><button class="primary" id="start">VYRAZIŤ</button><button class="secondary" id="enableTilt">📱 Zapnúť nakláňanie</button></div><div class="small">Počítač: W / ↑ plyn · S / ↓ brzda · A,D / šípky zatáčanie</div></div></div>
+  <div class="hud" id="hud"><div class="top"><div class="brand">VOĽNÁ JAZDA<b>MESTO</b></div><div class="meters"><div class="meter"><strong id="speed">0</strong><small>KM/H</small></div><div class="meter"><strong id="gear">N</strong><small>PREVOD</small></div></div></div><div class="bottom"><div class="tip"><b>VOĽNÁ JAZDA</b><br>Telefón použi ako ovládač. Jazdi a odbočuj po meste.</div><div class="controls"><div class="steer"><button class="control" data-steer="-1" aria-label="Vľavo">◀</button><button class="control" data-steer="1" aria-label="Vpravo">▶</button></div><button class="pedal brake" data-pedal="brake"><span>▼</span>BRZDA</button><button class="pedal gas" data-pedal="gas"><span>▲</span>PLYN</button></div></div></div>
+  <div class="overlay" id="overlay"><div class="card"><div class="eyebrow">MESTO • VOĽNÁ JAZDA</div><h1>Sadni si<br>za volant.</h1><p>Hra beží na počítači. Naskenuj QR kód telefónom a použi ho ako bezdrôtový ovládač. Obe zariadenia musia mať internet.</p><div class="pair"><canvas id="qr"></canvas><div class="pairInfo">Naskenuj QR kód<br>alebo otvor adresu v mobile.<div class="code" id="pairCode">...</div><div class="status" id="connectionStatus">Pripájam ovládač…</div></div></div><button class="primary" id="start">VYRAZIŤ</button><div class="small">Počítač: W / ↑ plyn · S / ↓ brzda · A,D / šípky zatáčanie</div></div></div>
+  <div class="remote" id="remote" hidden><div class="remoteHead"><b>MESTO • OVLÁDAČ</b><small>Ovládanie hry na počítači</small><form class="connectForm" id="connectForm"><input id="peerCode" placeholder="Kód z obrazovky PC" autocomplete="off" maxlength="24"><button>PRIPOJIŤ</button></form><div class="remoteStatus" id="remoteStatus">Zadaj kód z hry alebo otvor QR odkaz.</div></div><div><div class="remoteControls"><div class="remoteSteer"><button data-rsteer="-1" aria-label="Zatoč doľava">◀</button><button data-rsteer="1" aria-label="Zatoč doprava">▶</button></div><div class="remotePedals"><button class="brake" data-rpedal="brake">▼<br>BRZDA</button><button class="gas" data-rpedal="gas">▲<br>PLYN</button></div></div><div class="remoteHint">Drž zatáčanie alebo pedál. Pusť tlačidlo pre zastavenie ovládania.</div></div></div>
+  <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
   <script type="module">
     import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-    const mount=document.querySelector('#game'),overlay=document.querySelector('#overlay'),tip=document.querySelector('#tip');
-    const scene=new THREE.Scene();scene.background=new THREE.Color(0xa9c5d3);scene.fog=new THREE.Fog(0xa9c5d3,100,410);
-    const camera=new THREE.PerspectiveCamera(61,innerWidth/innerHeight,.1,700);
-    const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;mount.appendChild(renderer.domElement);
-    scene.add(new THREE.HemisphereLight(0xeaf5ff,0x64695e,2.1));const sun=new THREE.DirectionalLight(0xfff0d7,3);sun.position.set(-80,120,70);sun.castShadow=true;sun.shadow.mapSize.set(1536,1536);sun.shadow.camera.left=-100;sun.shadow.camera.right=100;sun.shadow.camera.top=100;sun.shadow.camera.bottom=-100;scene.add(sun);
-    const city=new THREE.Group();scene.add(city);
-    const standard=(c,r=.85,m=0)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
-    const ground=new THREE.Mesh(new THREE.PlaneGeometry(900,900),standard(0x77936d,1));ground.rotation.x=-Math.PI/2;ground.position.y=-.12;ground.receiveShadow=true;city.add(ground);
-    const roadMat=standard(0x363a3c,.95),walkMat=standard(0xbab9af,.95),whiteMat=standard(0xe7e2d4,.8),yellowMat=standard(0xd2ad58,.85),curbMat=standard(0x777a76,.9);
-    const roadExtent=270,roadStep=72,roadWidth=20;
-    function addBox(parent,w,h,d,material,x,y,z,shadow=false){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);o.position.set(x,y,z);o.castShadow=shadow;o.receiveShadow=true;parent.add(o);return o}
-    // Real city grid with broad intersecting streets, pavements, lane lines and crosswalks.
-    for(let n=-3;n<=3;n++){
-      const p=n*roadStep;
-      addBox(city,roadWidth,.08,roadExtent*2,roadMat,p,.005,0);
-      addBox(city,roadExtent*2,.08,roadWidth,roadMat,0,.006,p);
-      for(const side of [-1,1]){
-        addBox(city,2,.16,roadExtent*2,walkMat,p+side*(roadWidth/2+1),.08,0);
-        addBox(city,roadExtent*2,.16,2,walkMat,0,.08,p+side*(roadWidth/2+1));
-        addBox(city,.32,.2,roadExtent*2,curbMat,p+side*(roadWidth/2),.08,0);
-        addBox(city,roadExtent*2,.2,.32,curbMat,0,.08,p+side*(roadWidth/2));
-      }
-      // Center lines are broken into dashes, stopping at intersections.
-      for(let d=-roadExtent;d<roadExtent;d+=12){if(Math.abs((d+roadStep/2)%roadStep-roadStep/2)<13)continue;
-        addBox(city,.16,.025,5,yellowMat,p,.06,d);addBox(city,5,.025,.16,yellowMat,d,.06,p);
-      }
-      for(const s of [-1,1])for(let q=-1;q<=1;q++){
-        const offset=q*1.35;
-        addBox(city,roadWidth-2,.035,.42,whiteMat,p+s*(roadWidth/2-3),.07,offset);
-        addBox(city,.42,.035,roadWidth-2,whiteMat,offset,.07,p+s*(roadWidth/2-3));
-      }
-    }
-    const facadeColors=[0xc9c0ad,0xd7d1c5,0xaab7b9,0xc0b6a8,0x9caeb1,0xd6c6ab,0xb6b8ad,0xaaa79f];
-    const windowMats=[standard(0x47616b,.4,.2),standard(0x82999b,.35,.25),standard(0x394b55,.45,.2)];
-    const buildings=[];
-    // Low-rise European-style blocks around every junction; varied roofs and façade windows.
-    for(let ix=-3;ix<3;ix++)for(let iz=-3;iz<3;iz++){
-      const bx=ix*roadStep+roadStep/2,bz=iz*roadStep+roadStep/2;
-      const count=3+Math.floor(Math.random()*3);
-      for(let j=0;j<count;j++){
-        const w=10+Math.random()*10,d=10+Math.random()*10,h=9+Math.random()*23;
-        const x=bx+(Math.random()-.5)*37,z=bz+(Math.random()-.5)*37;
-        const shell=new THREE.Group();shell.position.set(x,0,z);city.add(shell);
-        const material=standard(facadeColors[Math.floor(Math.random()*facadeColors.length)],.9,.05);
-        addBox(shell,w,h,d,material,0,h/2,0,true);
-        addBox(shell,w+0.35,.35,d+0.35,standard([0x52575a,0x6e6253,0x3d4d52][Math.floor(Math.random()*3)],.85),0,h+.16,0);
-        // Recessed-looking window bands on all visible sides.
-        const rows=Math.max(2,Math.floor(h/3.2));
-        for(let row=0;row<rows;row++)for(let col=0;col<Math.max(2,Math.floor(w/2.5));col++){
-          const wx=-w/2+1.35+col*(w-2.7)/Math.max(1,Math.floor(w/2.5)-1);const wy=1.6+row*2.7;
-          if(wy>h-1)continue;
-          addBox(shell,.9,1.25,.045,windowMats[(col+row)%windowMats.length],wx,wy,d/2+.03);
-          addBox(shell,.9,1.25,.045,windowMats[(col+row+1)%windowMats.length],wx,wy,-d/2-.03);
-        }
-        for(let row=0;row<rows;row++)for(let col=0;col<Math.max(2,Math.floor(d/2.7));col++){
-          const wz=-d/2+1.4+col*(d-2.8)/Math.max(1,Math.floor(d/2.7)-1),wy=1.6+row*2.7;if(wy>h-1)continue;
-          addBox(shell,.045,1.25,.85,windowMats[(col+row+1)%windowMats.length],w/2+.03,wy,wz);
-          addBox(shell,.045,1.25,.85,windowMats[(col+row)%windowMats.length],-w/2-.03,wy,wz);
-        }
-        buildings.push({x,z,r:Math.max(w,d)*.58});
-      }
-    }
-    // Street trees, benches and lamps add detail while keeping the junctions open.
-    const trunkMat=standard(0x69513a),leafMats=[standard(0x47754f),standard(0x56815a),standard(0x3f694b)];
-    const lampMat=standard(0x3b4142,.6,.35),glowMat=new THREE.MeshStandardMaterial({color:0xffe6a2,emissive:0x554018,roughness:.35});
-    function treeAt(x,z){const g=new THREE.Group();g.position.set(x,0,z);city.add(g);const t=new THREE.Mesh(new THREE.CylinderGeometry(.16,.23,2,7),trunkMat);t.position.y=1;t.castShadow=true;g.add(t);const c=new THREE.Mesh(new THREE.SphereGeometry(1.25,9,7),leafMats[Math.floor(Math.random()*leafMats.length)]);c.position.y=2.65;c.scale.set(1,1.12,1);c.castShadow=true;g.add(c);return g}
-    function lampAt(x,z,rot=0){const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=rot;city.add(g);addBox(g,.16,4.4,.16,lampMat,0,2.2,0,true);addBox(g,.14,.14,1.45,lampMat,0,4.3,.62);const l=addBox(g,.55,.18,.55,glowMat,0,4.23,1.15);return g}
-    for(let ix=-3;ix<=3;ix++)for(let iz=-3;iz<=3;iz++){
-      const x=ix*roadStep,z=iz*roadStep;
-      for(const s of [-1,1]){treeAt(x+s*14,z+14);treeAt(x+s*14,z-14);lampAt(x+s*12,z+11,s<0?0:Math.PI)}
-    }
-    // Player car faces its local +Z axis; steering rotates the heading, so roads can be followed and turns made.
-    const tireMat=standard(0x202426,.9),glass=new THREE.MeshPhysicalMaterial({color:0x668692,roughness:.2,metalness:.25,transparent:true,opacity:.88});
-    function makeCar(color=0x315e70){const root=new THREE.Group();const paint=new THREE.MeshStandardMaterial({color,roughness:.32,metalness:.55});
-      addBox(root,1.88,.55,3.8,paint,0,.72,0,true);addBox(root,1.67,.16,2.8,paint,0,1.02,-.05,true);addBox(root,1.46,.65,1.86,glass,0,1.36,-.22,true);addBox(root,1.65,.18,.6,paint,0,1.05,-1.55,true);
-      for(const x of [-.96,.96])for(const z of [-1.22,1.22]){const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.39,.39,.27,20),tireMat);wheel.rotation.z=Math.PI/2;wheel.position.set(x,.43,z);wheel.castShadow=true;root.add(wheel);const hub=new THREE.Mesh(new THREE.CylinderGeometry(.17,.17,.29,16),standard(0xb4b7b2,.28,.7));hub.rotation.z=Math.PI/2;hub.position.set(x,.43,z);root.add(hub)}
-      for(const x of [-.63,.63]){addBox(root,.42,.16,.08,standard(0xfff0c2,.24),x,.78,1.94);addBox(root,.38,.16,.08,standard(0xb83c32,.28),x,.78,-1.94)}
-      return root}
-    const car=makeCar();scene.add(car);
-    // Parked cars make side streets feel lived-in; they are static scenery, not race opponents.
-    for(let i=0;i<48;i++){const row=Math.floor(i/8),col=i%8;const x=(row-3)*72+(col%2?13:-13),z=(col-3.5)*42+(Math.random()-.5)*4;const parked=makeCar([0x818b8e,0x7d4639,0x283b48,0xb9b5a8,0x42584d][i%5]);parked.scale.setScalar(.78);parked.position.set(x,.02,z);parked.rotation.y=(row%2?Math.PI/2:0);city.add(parked)}
+    const query=new URLSearchParams(location.search),controllerMode=query.has('controller');
+    const remote=document.querySelector('#remote'),hud=document.querySelector('#hud'),overlay=document.querySelector('#overlay');
+    if(controllerMode){remote.hidden=false;hud.style.display='none';overlay.style.display='none';document.querySelector('#game').style.display='none'}
 
-    const state={running:false,speed:0,velocity:0,heading:0,steer:0,steerValue:0,gas:false,brake:false,keys:new Set(),tilt:0,tiltEnabled:false,x:0,z:0};
-    const speedEl=document.querySelector('#speed'),gearEl=document.querySelector('#gear');
-    function start(){state.running=true;state.speed=0;state.velocity=0;state.heading=0;state.steer=0;state.x=0;state.z=8;car.position.set(0,0,8);car.rotation.set(0,0,0);camera.position.set(0,6,20);overlay.classList.add('hidden')}
-    document.querySelector('#start').addEventListener('click',start);
-    async function enableTilt(){try{if(typeof DeviceOrientationEvent==='undefined')throw new Error();if(typeof DeviceOrientationEvent.requestPermission==='function'&&await DeviceOrientationEvent.requestPermission()!=='granted')throw new Error();state.tiltEnabled=true;tip.innerHTML='<b>NAKLÁŇANIE ZAPNUTÉ</b><br>Nakloň telefón doľava alebo doprava.'}catch{tip.innerHTML='<b>TIP</b><br>Senzor nedostupný — používaj tlačidlá zatáčania.'}}
-    document.querySelector('#enableTilt').addEventListener('click',enableTilt);document.querySelector('#tilt').addEventListener('click',enableTilt);
-    addEventListener('deviceorientation',e=>{if(e.gamma!==null)state.tilt=THREE.MathUtils.clamp(e.gamma/25,-1,1)});
-    const held=new Set();
-    document.querySelectorAll('[data-steer]').forEach(button=>{const val=Number(button.dataset.steer);const down=e=>{e.preventDefault();held.add(val);button.classList.add('active');state.steerValue=[...held].reduce((a,b)=>a+b,0)};const up=()=>{held.delete(val);button.classList.remove('active');state.steerValue=[...held].reduce((a,b)=>a+b,0)};button.addEventListener('pointerdown',down);button.addEventListener('pointerup',up);button.addEventListener('pointercancel',up);button.addEventListener('lostpointercapture',up)});
-    document.querySelectorAll('[data-pedal]').forEach(button=>{const type=button.dataset.pedal;const down=e=>{e.preventDefault();button.setPointerCapture?.(e.pointerId);state[type]=true;button.classList.add('active')};const up=()=>{state[type]=false;button.classList.remove('active')};button.addEventListener('pointerdown',down);button.addEventListener('pointerup',up);button.addEventListener('pointercancel',up);button.addEventListener('lostpointercapture',up)});
-    addEventListener('keydown',e=>{state.keys.add(e.key.toLowerCase());if(e.key.startsWith('Arrow'))e.preventDefault()});addEventListener('keyup',e=>state.keys.delete(e.key.toLowerCase()));
-    const forward=new THREE.Vector3(),desiredCamera=new THREE.Vector3(),lookAt=new THREE.Vector3();
-    function update(dt){if(!state.running){camera.position.lerp(new THREE.Vector3(0,6,20),.04);camera.lookAt(0,1,0);return}
-      const k=state.keys,left=k.has('a')||k.has('arrowleft'),right=k.has('d')||k.has('arrowright');let turn=(right?1:0)-(left?1:0);if(state.steerValue)turn=state.steerValue;else if(state.tiltEnabled)turn=state.tilt;
-      const gas=state.gas||k.has('w')||k.has('arrowup'),brake=state.brake||k.has('s')||k.has('arrowdown');
-      if(gas)state.velocity=Math.min(34,state.velocity+10*dt);else state.velocity*=Math.exp(-.4*dt);
-      if(brake){if(state.velocity>1)state.velocity=Math.max(0,state.velocity-20*dt);else state.velocity=Math.max(-8,state.velocity-8*dt)}
-      if(!gas&&!brake&&Math.abs(state.velocity)<.15)state.velocity=0;
-      state.speed=Math.abs(state.velocity)*3.6;
-      const direction=state.velocity<-.1?-1:1;const speedFactor=Math.min(Math.abs(state.velocity)/5,1.3);
-      // Steering follows vehicle speed and reverses correctly while backing up.
-      state.heading+=turn*1.35*speedFactor*direction*dt;
-      forward.set(Math.sin(state.heading),0,Math.cos(state.heading));state.x+=forward.x*state.velocity*dt;state.z+=forward.z*state.velocity*dt;
-      // City edges gently stop the car instead of ending the free-drive session.
-      if(Math.abs(state.x)>roadExtent-12||Math.abs(state.z)>roadExtent-12){state.velocity*=.75;state.x=THREE.MathUtils.clamp(state.x,-roadExtent+12,roadExtent-12);state.z=THREE.MathUtils.clamp(state.z,-roadExtent+12,roadExtent-12)}
-      car.position.set(state.x,.02,state.z);car.rotation.y=state.heading;car.rotation.z=-turn*Math.min(Math.abs(state.velocity)/22,.16);
-      const behind=new THREE.Vector3(-Math.sin(state.heading)*12,6.1,-Math.cos(state.heading)*12);desiredCamera.set(state.x+behind.x,behind.y,state.z+behind.z);camera.position.lerp(desiredCamera,1-Math.exp(-4*dt));lookAt.set(state.x+forward.x*5,1.1,state.z+forward.z*5);camera.lookAt(lookAt);
-      speedEl.textContent=Math.round(state.speed);gearEl.textContent=state.velocity<-.2?'R':state.velocity>.2?'D':'N';
+    let peer=null,connection=null;
+    function setRemoteStatus(text,color){const el=document.querySelector('#remoteStatus');if(el){el.textContent=text;el.style.color=color||'#ffdd91'}}
+    function setPcStatus(text){const el=document.querySelector('#connectionStatus');if(el)el.textContent=text}
+
+    // Create a peer-to-peer link: phone sends button state directly to the computer browser.
+    if(window.Peer){
+      peer=new window.Peer();
+      peer.on('open',id=>{
+        if(controllerMode){const wanted=query.get('controller');document.querySelector('#peerCode').value=wanted||'';connectTo(wanted)}
+        else{
+          document.querySelector('#pairCode').textContent=id.slice(0,8).toUpperCase();
+          const link=`${location.origin}${location.pathname}?controller=${encodeURIComponent(id)}`;
+          if(window.QRCode)window.QRCode.toCanvas(document.querySelector('#qr'),link,{width:112,margin:1,errorCorrectionLevel:'M'}).catch(()=>{});
+          document.querySelector('#qr').title=link;
+          setPcStatus('Čaká na telefón');
+        }
+      });
+      peer.on('connection',conn=>{if(controllerMode)return;if(connection)connection.close();connection=conn;conn.on('open',()=>setPcStatus('Telefón pripojený ✓'));conn.on('data',data=>{if(data&&data.type==='control')remoteInput={steer:data.steer||0,gas:!!data.gas,brake:!!data.brake}});conn.on('close',()=>{remoteInput={steer:0,gas:false,brake:false};setPcStatus('Telefón odpojený')})});
+      peer.on('error',err=>{console.warn('PeerJS:',err.type);if(controllerMode)setRemoteStatus('Nepodarilo sa pripojiť. Skontroluj kód a internet.','#ff9292');else setPcStatus('Spojenie nedostupné — skontroluj internet')});
+    }else{setPcStatus('Nepodarilo sa načítať ovládač (PeerJS)')}
+
+    const remoteInput={steer:0,gas:false,brake:false};
+    function connectTo(id){if(!peer||!id)return;setRemoteStatus('Pripájam sa k počítaču…');const conn=peer.connect(id,{reliable:true});conn.on('open',()=>{connection=conn;setRemoteStatus('Pripojené ✓ Drž tlačidlá na ovládanie','#baff66')});conn.on('error',()=>setRemoteStatus('Spojenie zlyhalo. Obnov stránku a skús znova.','#ff9292'));conn.on('close',()=>{connection=null;setRemoteStatus('Spojenie s počítačom sa prerušilo.','#ff9292')})}
+    document.querySelector('#connectForm').addEventListener('submit',e=>{e.preventDefault();const id=document.querySelector('#peerCode').value.trim();if(id)connectTo(id)});
+
+    let phoneSteer=0,phoneGas=false,phoneBrake=false;
+    function sendController(){if(connection&&connection.open)connection.send({type:'control',steer:phoneSteer,gas:phoneGas,brake:phoneBrake})}
+    setInterval(sendController,50);
+    const steerHeld=new Set();document.querySelectorAll('[data-rsteer]').forEach(btn=>{const val=Number(btn.dataset.rsteer),down=e=>{e.preventDefault();steerHeld.add(val);phoneSteer=[...steerHeld].reduce((a,b)=>a+b,0);btn.classList.add('active')},up=()=>{steerHeld.delete(val);phoneSteer=[...steerHeld].reduce((a,b)=>a+b,0);btn.classList.remove('active')};btn.addEventListener('pointerdown',down);btn.addEventListener('pointerup',up);btn.addEventListener('pointercancel',up);btn.addEventListener('lostpointercapture',up)});
+    document.querySelectorAll('[data-rpedal]').forEach(btn=>{const type=btn.dataset.rpedal,down=e=>{e.preventDefault();btn.setPointerCapture?.(e.pointerId);if(type==='gas')phoneGas=true;else phoneBrake=true;btn.classList.add('active')},up=()=>{if(type==='gas')phoneGas=false;else phoneBrake=false;btn.classList.remove('active')};btn.addEventListener('pointerdown',down);btn.addEventListener('pointerup',up);btn.addEventListener('pointercancel',up);btn.addEventListener('lostpointercapture',up)});
+
+    if(!controllerMode){
+      const scene=new THREE.Scene();scene.background=new THREE.Color(0xa9c5d3);scene.fog=new THREE.Fog(0xa9c5d3,105,410);
+      const camera=new THREE.PerspectiveCamera(61,innerWidth/innerHeight,.1,700);
+      const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;document.querySelector('#game').appendChild(renderer.domElement);
+      scene.add(new THREE.HemisphereLight(0xeaf5ff,0x64695e,2.1));const sun=new THREE.DirectionalLight(0xfff0d7,3);sun.position.set(-80,120,70);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-100;sun.shadow.camera.right=100;sun.shadow.camera.top=100;sun.shadow.camera.bottom=-100;scene.add(sun);
+      const city=new THREE.Group();scene.add(city);const mat=(c,r=.85,m=0)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
+      const ground=new THREE.Mesh(new THREE.PlaneGeometry(900,900),mat(0x788a6c,1));ground.rotation.x=-Math.PI/2;ground.position.y=-.12;ground.receiveShadow=true;city.add(ground);
+      const road=mat(0x34383a,.96),sidewalk=mat(0xbab9af,.96),lane=mat(0xe3ddc9,.8),curb=mat(0x777a76,.9),roadExtent=270,step=72,width=20;
+      function box(parent,w,h,d,material,x,y,z,shadow=false){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);o.position.set(x,y,z);o.castShadow=shadow;o.receiveShadow=true;parent.add(o);return o}
+      for(let n=-3;n<=3;n++){const p=n*step;box(city,width,.08,roadExtent*2,road,p,.005,0);box(city,roadExtent*2,.08,width,road,0,.006,p);for(const s of [-1,1]){box(city,2,.16,roadExtent*2,sidewalk,p+s*(width/2+1),.08,0);box(city,roadExtent*2,.16,2,sidewalk,0,.08,p+s*(width/2+1));box(city,.3,.2,roadExtent*2,curb,p+s*width/2,.08,0);box(city,roadExtent*2,.2,.3,curb,0,.08,p+s*width/2)}for(let d=-roadExtent;d<roadExtent;d+=12){if(Math.abs((d+step/2)%step-step/2)<13)continue;box(city,.16,.025,5,lane,p,.06,d);box(city,5,.025,.16,lane,d,.06,p)}for(const s of [-1,1])for(let q=-1;q<=1;q++){box(city,width-2,.035,.42,lane,p+s*(width/2-3),.07,q*1.35);box(city,.42,.035,width-2,lane,q*1.35,.07,p+s*(width/2-3))}}
+      const facade=[0xc9c0ad,0xd7d1c5,0xaab7b9,0xc0b6a8,0x9caeb1,0xd6c6ab,0xb6b8ad,0xaaa79f],windows=[mat(0x526c75,.35,.2),mat(0x83989a,.35,.2),mat(0x43535b,.4,.15)];
+      for(let ix=-3;ix<3;ix++)for(let iz=-3;iz<3;iz++){const bx=ix*step+step/2,bz=iz*step+step/2,count=3+Math.floor(Math.random()*3);for(let j=0;j<count;j++){const w=10+Math.random()*10,d=10+Math.random()*10,h=9+Math.random()*22,x=bx+(Math.random()-.5)*36,z=bz+(Math.random()-.5)*36,g=new THREE.Group();g.position.set(x,0,z);city.add(g);box(g,w,h,d,mat(facade[Math.floor(Math.random()*facade.length)],.9,.05),0,h/2,0,true);box(g,w+.3,.35,d+.3,mat([0x52575a,0x6e6253,0x3d4d52][Math.floor(Math.random()*3)]),0,h+.16,0);const rows=Math.max(2,Math.floor(h/3.2));for(let r=0;r<rows;r++)for(let c=0;c<Math.max(2,Math.floor(w/2.5));c++){const wx=-w/2+1.3+c*(w-2.6)/Math.max(1,Math.floor(w/2.5)-1),wy=1.6+r*2.7;if(wy<h-1){box(g,.88,1.25,.04,windows[(r+c)%3],wx,wy,d/2+.03);box(g,.88,1.25,.04,windows[(r+c+1)%3],wx,wy,-d/2-.03)}}}}
+      const trunk=mat(0x69513a),leaves=[mat(0x47754f),mat(0x56815a),mat(0x3f694b)],lamp=mat(0x41494b,.6,.3),lampGlow=new THREE.MeshStandardMaterial({color:0xffe6a2,emissive:0x554018});
+      for(let ix=-3;ix<=3;ix++)for(let iz=-3;iz<=3;iz++){const x=ix*step,z=iz*step;for(const s of [-1,1]){const tree=new THREE.Group();tree.position.set(x+s*14,0,z+14);city.add(tree);const t=new THREE.Mesh(new THREE.CylinderGeometry(.16,.23,2,7),trunk);t.position.y=1;tree.add(t);const crown=new THREE.Mesh(new THREE.SphereGeometry(1.2,9,7),leaves[(ix+iz+3)%3]);crown.position.y=2.6;crown.scale.set(1,1.12,1);crown.castShadow=true;tree.add(crown);const pole=new THREE.Group();pole.position.set(x+s*12,0,z-11);city.add(pole);box(pole,.16,4.2,.16,lamp,0,2.1,0);box(pole,.14,.14,1.3,lamp,0,4,.55);box(pole,.5,.18,.5,lampGlow,0,3.98,1)}}
+      function makeCar(color=0x315e70){const root=new THREE.Group(),paint=mat(color,.33,.52),glass=new THREE.MeshStandardMaterial({color:0x68838b,roughness:.2,metalness:.25});box(root,1.9,.58,3.9,paint,0,.72,0,true);box(root,1.65,.16,2.8,paint,0,1.02,-.05,true);box(root,1.46,.65,1.88,glass,0,1.36,-.22,true);box(root,1.6,.18,.5,paint,0,1.04,-1.62,true);for(const x of [-.96,.96])for(const z of [-1.22,1.22]){const w=new THREE.Mesh(new THREE.CylinderGeometry(.39,.39,.27,18),mat(0x202426,.9));w.rotation.z=Math.PI/2;w.position.set(x,.43,z);w.castShadow=true;root.add(w)}for(const x of [-.63,.63]){box(root,.4,.15,.08,mat(0xfff0c2,.25),x,.78,1.97);box(root,.38,.15,.08,mat(0xb83c32,.28),x,.78,-1.97)}return root}
+      const car=makeCar();scene.add(car);
+      // Parked cars are scenery, not rivals or race traffic.
+      for(let i=0;i<38;i++){const row=Math.floor(i/7),col=i%7,x=(row-2)*72+(col%2?14:-14),z=(col-3)*42;const parked=makeCar([0x818b8e,0x7d4639,0x283b48,0xb9b5a8,0x42584d][i%5]);parked.scale.setScalar(.78);parked.position.set(x,.02,z);parked.rotation.y=row%2?Math.PI/2:0;city.add(parked)}
+      const state={running:false,speed:0,velocity:0,heading:0,steer:0,steerValue:0,gas:false,brake:false,keys:new Set(),x:0,z:8};
+      function start(){state.running=true;state.speed=0;state.velocity=0;state.heading=0;state.steer=0;state.x=0;state.z=8;car.position.set(0,0,8);car.rotation.set(0,0,0);overlay.classList.add('hidden')}
+      document.querySelector('#start').addEventListener('click',start);
+      document.querySelectorAll('[data-steer]').forEach(btn=>{const v=Number(btn.dataset.steer),down=e=>{e.preventDefault();state.steerValue=v;btn.classList.add('active')},up=()=>{if(state.steerValue===v)state.steerValue=0;btn.classList.remove('active')};btn.addEventListener('pointerdown',down);btn.addEventListener('pointerup',up);btn.addEventListener('pointercancel',up);btn.addEventListener('lostpointercapture',up)});
+      document.querySelectorAll('[data-pedal]').forEach(btn=>{const type=btn.dataset.pedal,down=e=>{e.preventDefault();btn.setPointerCapture?.(e.pointerId);state[type]=true;btn.classList.add('active')},up=()=>{state[type]=false;btn.classList.remove('active')};btn.addEventListener('pointerdown',down);btn.addEventListener('pointerup',up);btn.addEventListener('pointercancel',up);btn.addEventListener('lostpointercapture',up)});
+      addEventListener('keydown',e=>{state.keys.add(e.key.toLowerCase());if(e.key.startsWith('Arrow'))e.preventDefault()});addEventListener('keyup',e=>state.keys.delete(e.key.toLowerCase()));
+      const speedEl=document.querySelector('#speed'),gearEl=document.querySelector('#gear'),forward=new THREE.Vector3(),camPos=new THREE.Vector3(),look=new THREE.Vector3();
+      function update(dt){if(!state.running){camera.position.lerp(new THREE.Vector3(0,6,20),.04);camera.lookAt(0,1,0);return}const k=state.keys,left=k.has('a')||k.has('arrowleft'),right=k.has('d')||k.has('arrowright');let turn=(right?1:0)-(left?1:0);if(state.steerValue)turn=state.steerValue;const input=connection&&connection.open?remoteInput:null;if(input&&input.steer)turn=input.steer;const gas=state.gas||k.has('w')||k.has('arrowup')||!!(input&&input.gas),brake=state.brake||k.has('s')||k.has('arrowdown')||!!(input&&input.brake);
+        if(gas)state.velocity=Math.min(34,state.velocity+10*dt);else state.velocity*=Math.exp(-.32*dt);if(brake){if(state.velocity>1)state.velocity=Math.max(0,state.velocity-20*dt);else state.velocity=Math.max(-8,state.velocity-8*dt)}if(!gas&&!brake&&Math.abs(state.velocity)<.15)state.velocity=0;
+        const reverse=state.velocity<-.1?-1:1,turnPower=Math.min(Math.abs(state.velocity)/4,1.3);state.heading+=turn*1.35*turnPower*reverse*dt;forward.set(Math.sin(state.heading),0,Math.cos(state.heading));state.x+=forward.x*state.velocity*dt;state.z+=forward.z*state.velocity*dt;
+        state.x=THREE.MathUtils.clamp(state.x,-roadExtent+5,roadExtent-5);state.z=THREE.MathUtils.clamp(state.z,-roadExtent+5,roadExtent-5);car.position.set(state.x,.02,state.z);car.rotation.y=state.heading;car.rotation.z=-turn*Math.min(Math.abs(state.velocity)/22,.13);
+        camPos.set(state.x-Math.sin(state.heading)*12,6.1,state.z-Math.cos(state.heading)*12);camera.position.lerp(camPos,1-Math.exp(-4*dt));look.set(state.x+forward.x*5,1.1,state.z+forward.z*5);camera.lookAt(look);speedEl.textContent=Math.round(Math.abs(state.velocity)*3.6);gearEl.textContent=state.velocity<-.2?'R':state.velocity>.2?'D':'N'}
+      let last=performance.now();function animate(now){requestAnimationFrame(animate);const dt=Math.min((now-last)/1000,.04);last=now;update(dt);renderer.render(scene,camera)}requestAnimationFrame(animate);
+      addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.65))});
     }
-    let last=performance.now();function frame(now){requestAnimationFrame(frame);const dt=Math.min((now-last)/1000,.04);last=now;update(dt);renderer.render(scene,camera)}requestAnimationFrame(frame);
-    addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.65))});
   </script>
 </body>
 </html>
