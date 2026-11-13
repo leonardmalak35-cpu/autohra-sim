@@ -1,1 +1,105 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#101a27">
+  <title>Autohra — Nočná jazda</title>
+  <style>
+    :root{color-scheme:dark;--cyan:#5be7ff;--lime:#b7ff67;--panel:rgba(12,21,32,.78)}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101a27;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#f5f8fc;touch-action:none}
+    #game{position:fixed;inset:0}canvas{display:block;width:100%;height:100%}
+    .hud{position:fixed;inset:0;pointer-events:none;padding:calc(16px + env(safe-area-inset-top)) 16px calc(14px + env(safe-area-inset-bottom));display:flex;flex-direction:column;justify-content:space-between}
+    .topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.brand{font-size:12px;font-weight:900;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase;text-shadow:0 2px 12px #001}.brand span{display:block;color:white;font-size:19px;letter-spacing:.04em;margin-top:3px}
+    .stats{display:flex;gap:9px}.stat{min-width:76px;text-align:center;padding:9px 12px;background:var(--panel);border:1px solid #ffffff20;border-radius:14px;backdrop-filter:blur(10px)}.stat strong{display:block;font-size:20px;line-height:1}.stat small{display:block;color:#aab8c8;font-size:9px;letter-spacing:.13em;margin-top:5px}
+    .gear{pointer-events:auto;border:1px solid #ffffff2b;background:var(--panel);color:#fff;border-radius:12px;padding:10px 12px;font-size:18px}
+    .bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:14px}.hint{font-size:11px;color:#d6e0e9;background:var(--panel);border:1px solid #ffffff20;border-radius:12px;padding:10px 12px;max-width:220px;line-height:1.45;backdrop-filter:blur(10px)}.hint b{color:var(--lime)}
+    .controls{display:flex;gap:10px;align-items:flex-end;pointer-events:auto}.steer{display:flex;gap:7px;margin-right:8px}.control{width:62px;height:62px;border-radius:20px;border:1px solid #ffffff42;background:rgba(20,33,48,.72);color:#fff;font-size:25px;font-weight:800;box-shadow:0 6px 20px #0005;touch-action:none}.control:active,.control.active{background:#5be7ff44;border-color:var(--cyan);transform:scale(.96)}.pedal{width:69px;height:74px;border-radius:20px;border:1px solid #ffffff42;background:rgba(20,33,48,.78);color:#fff;font-size:12px;font-weight:900;letter-spacing:.08em;touch-action:none}.pedal span{display:block;font-size:23px;margin-bottom:3px}.pedal.gas{background:rgba(91,231,255,.2);border-color:#5be7ff88}.pedal.brake{background:rgba(255,111,111,.17);border-color:#ff777766}
+    .overlay{position:fixed;inset:0;display:grid;place-items:center;padding:22px;background:linear-gradient(180deg,rgba(8,15,24,.25),rgba(8,15,24,.74));transition:opacity .25s,visibility .25s}.overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}.card{width:min(440px,100%);padding:29px 25px 24px;border:1px solid #ffffff24;border-radius:26px;background:rgba(12,21,32,.9);box-shadow:0 24px 80px #0008;backdrop-filter:blur(18px);text-align:center}.eyebrow{font-size:10px;letter-spacing:.2em;color:var(--cyan);font-weight:900}.card h1{font-size:clamp(34px,10vw,54px);line-height:.98;margin:12px 0 12px;letter-spacing:-.06em}.card p{color:#c1ceda;line-height:1.55;font-size:14px;margin:0 auto 21px;max-width:340px}.actions{display:grid;gap:10px}.primary,.secondary{width:100%;padding:15px 18px;border-radius:15px;font-size:15px;font-weight:900;cursor:pointer}.primary{border:0;background:var(--lime);color:#101820;box-shadow:0 8px 26px #b7ff6730}.secondary{border:1px solid #ffffff2a;background:#ffffff0b;color:#f5f8fc}.tiny{font-size:11px;color:#8291a1;margin-top:15px}.mobile-note{display:none}
+    @media(max-width:600px){.hud{padding-left:12px;padding-right:12px}.brand span{font-size:16px}.stat{min-width:63px;padding:8px}.stat strong{font-size:17px}.stats{gap:6px}.hint{max-width:145px;font-size:10px;padding:8px}.controls{gap:6px}.steer{gap:5px;margin-right:0}.control{width:49px;height:55px;border-radius:16px;font-size:21px}.pedal{width:57px;height:66px;border-radius:17px;font-size:10px}.pedal span{font-size:20px}.gear{padding:8px 9px}}
+    @media(max-height:520px){.hud{padding-top:8px;padding-bottom:8px}.hint{display:none}.control{height:48px}.pedal{height:56px}.card{padding:20px}.card h1{font-size:38px}}
+  </style>
+</head>
+<body>
+  <div id="game" aria-label="3D automobilová hra"></div>
+  <div class="hud">
+    <div class="topbar">
+      <div class="brand">MALAK RACING <span>NOČNÁ JAZDA</span></div>
+      <div class="stats"><div class="stat"><strong id="speed">0</strong><small>KM/H</small></div><div class="stat"><strong id="distance">0.0</strong><small>KM</small></div></div>
+      <button class="gear" id="tiltButton" aria-label="Zapnúť ovládanie nakláňaním" title="Ovládanie nakláňaním">📱</button>
+    </div>
+    <div class="bottom">
+      <div class="hint" id="hint"><b>TIP:</b> Nakláňaj telefón na zatáčanie.<br>Plyn a brzda sú vpravo.</div>
+      <div class="controls">
+        <div class="steer"><button class="control" data-steer="-1" aria-label="Zatoč doľava">‹</button><button class="control" data-steer="1" aria-label="Zatoč doprava">›</button></div>
+        <button class="pedal brake" data-pedal="brake"><span>▾</span>BRZDA</button>
+        <button class="pedal gas" data-pedal="gas"><span>▲</span>PLYN</button>
+      </div>
+    </div>
+  </div>
+  <div class="overlay" id="overlay">
+    <div class="card">
+      <div class="eyebrow">⟡ 3D JAZDNÝ ZÁŽITOK ⟡</div>
+      <h1 id="title">Naštartuj.<br>Vyraz.</h1>
+      <p id="message">Uhýbaj autám a jazdi čo najďalej. Na mobile zatáčaj nakláňaním, alebo tlačidlami. Plyn a brzdu drž prstom.</p>
+      <div class="actions"><button class="primary" id="startButton">ŠTARTOVAŤ JAZDU</button><button class="secondary" id="enableTilt">📱 Zapnúť nakláňanie</button></div>
+      <div class="tiny">Počítač: WASD / šípky · Plyn: ↑ alebo W · Brzda: ↓ alebo S</div>
+    </div>
+  </div>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
 
+    const mount=document.querySelector('#game');
+    const scene=new THREE.Scene(); scene.background=new THREE.Color(0x9ac9df); scene.fog=new THREE.Fog(0x9ac9df,75,260);
+    const camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,500);
+    const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false}); renderer.setPixelRatio(Math.min(devicePixelRatio,1.8)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.05; mount.appendChild(renderer.domElement);
+    scene.add(new THREE.HemisphereLight(0xe4f5ff,0x59644b,2.1));
+    const sun=new THREE.DirectionalLight(0xfff1d4,3.2); sun.position.set(-35,55,25); sun.castShadow=true; sun.shadow.mapSize.set(1024,1024); sun.shadow.camera.left=-55; sun.shadow.camera.right=55; sun.shadow.camera.top=55; sun.shadow.camera.bottom=-55; scene.add(sun);
+    const mat=(color,roughness=.8,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
+    const grassMat=mat(0x638d54),roadMat=mat(0x333a43),lineMat=mat(0xf4f0db),edgeMat=mat(0xe35243),wheelMat=mat(0x15191d),glassMat=new THREE.MeshStandardMaterial({color:0x9fe5ef,metalness:.2,roughness:.2}),carMat=new THREE.MeshStandardMaterial({color:0x00a9c7,metalness:.38,roughness:.28}),whiteMat=mat(0xf1f4f4,.35,.15);
+    const ground=new THREE.Mesh(new THREE.PlaneGeometry(1200,900),grassMat); ground.rotation.x=-Math.PI/2; ground.position.set(0,-.12,-300); ground.receiveShadow=true; scene.add(ground);
+    const roadChunks=[]; const roadWidth=12,chunkLength=24,chunkCount=14;
+    for(let i=0;i<chunkCount;i++){const group=new THREE.Group(); const road=new THREE.Mesh(new THREE.PlaneGeometry(roadWidth,chunkLength),roadMat); road.rotation.x=-Math.PI/2; road.position.y=0; road.receiveShadow=true; group.add(road);
+      for(const side of [-1,1]){const edge=new THREE.Mesh(new THREE.BoxGeometry(.22,.035,chunkLength),edgeMat);edge.position.set(side*(roadWidth/2-.2),.04,0);group.add(edge)}
+      for(const lane of [-1,1]){const dash=new THREE.Mesh(new THREE.BoxGeometry(.12,.025,3.1),lineMat);dash.position.set(lane*2,.035,0);group.add(dash)}
+      group.position.z=-i*chunkLength; scene.add(group); roadChunks.push(group)}
+    const car=new THREE.Group(); scene.add(car);
+    function box(parent,w,h,d,material,x,y,z){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m}
+    box(car,1.85,.58,3.45,carMat,0,.68,0); box(car,1.45,.64,1.65,glassMat,0,1.24,-.25); box(car,1.68,.22,.8,carMat,0,1.05,1.08); box(car,1.75,.12,.65,carMat,0,.48,-1.28);
+    for(const x of [-.88,.88])for(const z of [-1.05,1.05]){const tire=new THREE.Mesh(new THREE.CylinderGeometry(.39,.39,.27,20),wheelMat);tire.rotation.z=Math.PI/2;tire.position.set(x,.43,z);tire.castShadow=true;car.add(tire);const hub=new THREE.Mesh(new THREE.CylinderGeometry(.17,.17,.285,16),mat(0xb9c4ca,.3,.7));hub.rotation.z=Math.PI/2;hub.position.set(x,.43,z);car.add(hub)}
+    for(const x of [-.62,.62]){const lamp=new THREE.Mesh(new THREE.BoxGeometry(.4,.16,.08),whiteMat);lamp.position.set(x,.76,1.75);car.add(lamp);const tail=new THREE.Mesh(new THREE.BoxGeometry(.38,.16,.08),mat(0xff493d,.35));tail.position.set(x,.75,-1.75);car.add(tail)}
+    const traffic=[]; const colors=[0xf1a63a,0xe85252,0xf0f0ec,0x655be7,0x4ca773];
+    function makeTraffic(color){const g=new THREE.Group();const body=new THREE.Mesh(new THREE.BoxGeometry(1.7,.58,3.1),mat(color,.35,.2));body.position.y=.66;body.castShadow=true;g.add(body);const top=new THREE.Mesh(new THREE.BoxGeometry(1.35,.58,1.5),glassMat);top.position.set(0,1.18,-.2);top.castShadow=true;g.add(top);for(const x of [-.84,.84])for(const z of [-.95,.95]){const w=new THREE.Mesh(new THREE.CylinderGeometry(.34,.34,.23,16),wheelMat);w.rotation.z=Math.PI/2;w.position.set(x,.38,z);g.add(w)}scene.add(g);return g}
+    for(let i=0;i<6;i++){const obj=makeTraffic(colors[i%colors.length]);traffic.push({obj,z:-80-i*52,lane:[-3.7,0,3.7][Math.floor(Math.random()*3)],active:i<3})}
+    const trees=[]; const trunkMat=mat(0x684b32),leafMats=[mat(0x367b52),mat(0x478957),mat(0x6a9850)];
+    function tree(){const g=new THREE.Group();const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.16,.23,1.8,7),trunkMat);trunk.position.y=.9;trunk.castShadow=true;g.add(trunk);const leaf=new THREE.Mesh(new THREE.ConeGeometry(1.05,2.7,8),leafMats[Math.floor(Math.random()*leafMats.length)]);leaf.position.y=2.7;leaf.castShadow=true;g.add(leaf);scene.add(g);return g}
+    for(let i=0;i<34;i++){const t=tree();trees.push({obj:t,z:-Math.random()*245,side:i%2?1:-1,offset:12+Math.random()*24})}
+    const overlay=document.querySelector('#overlay'),startButton=document.querySelector('#startButton'),enableTilt=document.querySelector('#enableTilt'),tiltButton=document.querySelector('#tiltButton'),title=document.querySelector('#title'),message=document.querySelector('#message');
+    const speedEl=document.querySelector('#speed'),distanceEl=document.querySelector('#distance'),hint=document.querySelector('#hint');
+    let running=false,speed=0,distance=0,steer=0,steerInput=0,gas=false,brake=false,tiltEnabled=false,tiltValue=0,last=performance.now(),roadTravel=0;
+    const keys=new Set();
+    function roadCurve(d){return Math.sin(d*.0032)*10+Math.sin(d*.00115+1.4)*14}
+    function playerRoadX(){return roadCurve(roadTravel)}
+    function reset(){speed=0;distance=0;roadTravel=0;steer=0;steerInput=0;gas=false;brake=false;traffic.forEach((v,i)=>{v.z=-80-i*52;v.active=i<3});}
+    function start(){reset();running=true;overlay.classList.add('hidden');last=performance.now()}
+    startButton.addEventListener('click',start);
+    function finish(){running=false;title.innerHTML='Jazda<br>skončila';message.innerHTML=`Prešiel/šla si <b>${distance.toFixed(1)} km</b> a dosiahol/a ${Math.round(speed)} km/h. Skús to znova a vyhni sa premávke!`;startButton.textContent='JAZDIŤ ZNOVA';overlay.classList.remove('hidden')}
+    async function enableMotion(){try{if(typeof DeviceOrientationEvent==='undefined'){hint.innerHTML='<b>TIP:</b> Nakláňanie nie je dostupné. Zatáčaj tlačidlami.';return}if(typeof DeviceOrientationEvent.requestPermission==='function'){const result=await DeviceOrientationEvent.requestPermission();if(result!=='granted')throw new Error('permission')}window.addEventListener('deviceorientation',e=>{if(e.gamma!==null){tiltValue=THREE.MathUtils.clamp(e.gamma/24,-1,1);tiltEnabled=true;hint.innerHTML='<b>NAKLÁŇANIE AKTÍVNE</b><br>Telefónom zatáčaš do strán.'}},true);tiltEnabled=true;hint.innerHTML='<b>NAKLÁŇANIE AKTÍVNE</b><br>Telefónom zatáčaš do strán.'}catch{hint.innerHTML='<b>TIP:</b> Povolenie senzora sa nepodarilo. Použi šípky na obrazovke.'}}
+    enableTilt.addEventListener('click',enableMotion);tiltButton.addEventListener('click',enableMotion);
+    document.querySelectorAll('[data-steer]').forEach(button=>{const val=Number(button.dataset.steer);const down=e=>{e.preventDefault();steerInput=val;button.classList.add('active')};const up=e=>{e.preventDefault();if(steerInput===val)steerInput=0;button.classList.remove('active')};button.addEventListener('pointerdown',down);button.addEventListener('pointerup',up);button.addEventListener('pointercancel',up);button.addEventListener('lostpointercapture',up)});
+    document.querySelectorAll('[data-pedal]').forEach(button=>{const key=button.dataset.pedal;const down=e=>{e.preventDefault();button.setPointerCapture?.(e.pointerId);if(key==='gas')gas=true;else brake=true;button.classList.add('active')};const up=e=>{if(key==='gas')gas=false;else brake=false;button.classList.remove('active')};button.addEventListener('pointerdown',down);button.addEventListener('pointerup',up);button.addEventListener('pointercancel',up)});
+    window.addEventListener('keydown',e=>{keys.add(e.key.toLowerCase());if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault()});window.addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));
+    function update(dt){if(running){const left=keys.has('arrowleft')||keys.has('a'),right=keys.has('arrowright')||keys.has('d');const input=(right?1:0)-(left?1:0);const desired=input||steerInput||(tiltEnabled?tiltValue:0);steer=THREE.MathUtils.damp(steer,desired,5.5,dt);
+      const accelerating=gas||keys.has('arrowup')||keys.has('w'), braking=brake||keys.has('arrowdown')||keys.has('s');if(accelerating)speed=Math.min(220,speed+82*dt);else speed=Math.max(0,speed-23*dt);if(braking)speed=Math.max(0,speed-145*dt);
+      const kmh=speed;const advance=(speed/3.6)*dt;distance+=advance/1000;roadTravel+=advance;speedEl.textContent=Math.round(kmh);distanceEl.textContent=distance.toFixed(1);
+      steer=THREE.MathUtils.clamp(steer,-1,1);const center=playerRoadX();car.position.set(center+steer*4.5,0,2.3);car.rotation.y=-steer*.12;car.rotation.z=-steer*.07;camera.position.x=THREE.MathUtils.damp(camera.position.x,center+steer*1.25,2.2,dt);camera.position.y=6.7;camera.position.z=10.4;camera.lookAt(center+steer*.35,1,-12);
+      roadChunks.forEach((g,i)=>{let z=-i*chunkLength+(roadTravel%chunkLength);if(z>12)z-=chunkCount*chunkLength;g.position.z=z;g.position.x=roadCurve(roadTravel-z)});
+      traffic.forEach(v=>{if(!v.active)return;v.z+=advance;if(v.z>12){v.z=-245-Math.random()*100;v.lane=[-3.7,0,3.7][Math.floor(Math.random()*3)];return}v.obj.position.set(roadCurve(roadTravel-v.z)+v.lane,0,v.z);if(Math.abs(v.z-2.3)<2.7&&Math.abs((steer*4.5)-v.lane)<1.65){finish()}});
+      trees.forEach(t=>{t.z+=advance;if(t.z>14){t.z=-240-Math.random()*50;t.offset=12+Math.random()*24}t.obj.position.set(roadCurve(roadTravel-t.z)+t.side*t.offset,0,t.z);t.obj.scale.setScalar(1+(t.offset-12)*.015)});
+    }else{camera.position.set(0,6.7,10.4);camera.lookAt(0,1,-12);car.position.set(0,0,2.3);roadChunks.forEach((g,i)=>{g.position.z=-i*chunkLength;g.position.x=0});traffic.forEach(v=>{v.obj.visible=v.active;v.obj.position.set(v.lane,0,v.z)});trees.forEach(t=>{t.obj.position.set(t.side*t.offset,0,t.z)})}}
+    function frame(now){requestAnimationFrame(frame);const dt=Math.min((now-last)/1000,.05);last=now;update(dt);renderer.render(scene,camera)}requestAnimationFrame(frame);
+    addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.8))});
+  </script>
+</body>
+</html>
